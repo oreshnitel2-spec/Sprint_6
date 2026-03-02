@@ -32,10 +32,10 @@ class TestMainPage:
     @allure.story("Проверка клика по Яндекс логотипу")
     def test_yandex_logo_click_success(self):
         self.driver.get(BASE_URL)
-        base_page = BasePage(self.driver)
-        base_page.click_yandex_logo()
-        self.driver.switch_to.window(self.driver.window_handles[1])
-        base_page.wait_dzen_loaded()
+        main_page = MainPage(self.driver)
+        main_page.click_yandex_logo()
+        main_page.switch_to_new_window()
+        main_page.wait_dzen_loaded()
         assert "dzen.ru" in self.driver.current_url, f"Ожидали 'dzen.ru' в URL, получили {self.driver.current_url}"
 
     @allure.story("Проверка клика по логотипу Самоката")
@@ -43,9 +43,8 @@ class TestMainPage:
         self.driver.get(BASE_URL)
         main_page = MainPage(self.driver)
         main_page.click_lower_order_button()
-        base_page = BasePage(self.driver)
-        base_page.click_samokat_logo()
-        base_page.wait_main_page_loaded()
+        main_page.click_samokat_logo()
+        main_page.wait_main_page_loaded()
         assert self.driver.current_url == BASE_URL, f"Ожидали URL '{BASE_URL}', получили {self.driver.current_url}"
 
     @allure.feature("Заказ")

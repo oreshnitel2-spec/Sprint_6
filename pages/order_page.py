@@ -4,78 +4,80 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions 
 from selenium.webdriver.common.keys import Keys
 import allure
+from pages.base_page import BasePage
+from locators.base_page_locators import BasePageLocators
 
-class OrderPage:
+class OrderPage(BasePage):
+    
     def __init__(self, driver):
         self.driver = driver
 
     @allure.step("Клик по кнопке 'Далее'")
     def click_next_button(self):
-        self.driver.find_element(*OrderPageLocators.NEXT_BUTTON).click()
+        self.click_element(OrderPageLocators.NEXT_BUTTON)
 
     @allure.step("Заполняем имя: {first_name}")
     def fill_first_name(self, first_name):
-        self.driver.find_element(*OrderPageLocators.FIRST_NAME).send_keys(first_name)
+        self.fill_input(OrderPageLocators.FIRST_NAME, first_name)
 
     @allure.step("Заполняем фамилию: {last_name}")
     def fill_last_name(self, last_name):
-        self.driver.find_element(*OrderPageLocators.LAST_NAME).send_keys(last_name)
+        self.fill_input(OrderPageLocators.LAST_NAME, last_name)
 
     @allure.step("Заполняем адрес: {address}")
     def fill_address(self, address):
-        self.driver.find_element(*OrderPageLocators.ADDRESS).send_keys(address)
+        self.fill_input(OrderPageLocators.ADDRESS, address)
 
     @allure.step("Заполняем станцию метро: {metro_station}")
     def fill_metro_station(self, metro_station):
-        self.driver.find_element(*OrderPageLocators.METRO_STATION).send_keys(metro_station)
-        metro_option = WebDriverWait(self.driver, 5).until(expected_conditions.element_to_be_clickable((By.XPATH, f"//div[text()='{metro_station}']")))
-        metro_option.click()
+        self.fill_input(OrderPageLocators.METRO_STATION, metro_station)
+        metro_option = (By.XPATH, f"//div[text()='{metro_station}']")
+        self.click_when_clickable(metro_option)
 
     @allure.step("Заполняем номер телефона: {phone_number}")
     def fill_phone_number(self, phone_number):
-        self.driver.find_element(*OrderPageLocators.PHONE_NUMBER).send_keys(phone_number)
+        self.fill_input(OrderPageLocators.PHONE_NUMBER, phone_number)
 
     @allure.step("Ожидаем загрузки второй страницы заказа")
     def wait_second_page(self):
-        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable(OrderPageLocators.DATE_PICKER))
+        self.wait_for_element_clickable(OrderPageLocators.DATE_PICKER)
 
     @allure.step("Заполняем дату доставки: {date}")
     def fill_date(self, date):
-        date_input = self.driver.find_element(*OrderPageLocators.DATE_PICKER)
-        date_input.clear()
-        date_input.send_keys(date)
-        date_input.send_keys(Keys.ENTER)
+        self.fill_input(OrderPageLocators.DATE_PICKER, date)
+        self.send_keys(OrderPageLocators.DATE_PICKER, Keys.ENTER)
+        
 
     @allure.step("Выбираем период аренды: {period}")
     def select_rental_period(self, period):
-        self.driver.find_element(*OrderPageLocators.RENTAL_PERIOD).click()
-        period_option = WebDriverWait(self.driver, 5).until(expected_conditions.element_to_be_clickable((By.XPATH, f"//div[text()='{period}']")))
-        period_option.click()
+        self.click_element(OrderPageLocators.RENTAL_PERIOD)
+        period_option = (By.XPATH, f"//div[text()='{period}']")
+        self.click_when_clickable(period_option)
 
     @allure.step("Выбираем цвет самоката: {color}")
     def select_color(self, color):
         if color == "black":
-            self.driver.find_element(*OrderPageLocators.BLACK_COLOR_CHECKBOX).click()
+            self.click_element(OrderPageLocators.BLACK_COLOR_CHECKBOX)
         elif color == "grey":
-            self.driver.find_element(*OrderPageLocators.GREY_COLOR_CHECKBOX).click()
+            self.click_element(OrderPageLocators.GREY_COLOR_CHECKBOX)
         else:
             raise ValueError(f"Unknown color: {color}")
         
     @allure.step("Клик по кнопке 'Заказать'")
     def click_order_button(self):
-        self.driver.find_element(*OrderPageLocators.ORDER_BUTTON).click()
+        self.click_element(OrderPageLocators.ORDER_BUTTON)
 
     @allure.step("Ожидаем появления окна подтверждения заказа")
     def wait_order_confirmation(self):
-        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable(OrderPageLocators.YES_BUTTON))
+        self.wait_for_element_clickable(OrderPageLocators.YES_BUTTON)
 
     @allure.step("Кликаем на кнопку 'Да' в окне подтверждения заказа")
     def confirm_order(self):
-        self.driver.find_element(*OrderPageLocators.YES_BUTTON).click()
+        self.click_element(OrderPageLocators.YES_BUTTON)
 
     @allure.step("Ожидаем появления сообщения об успешном оформлении заказа")
     def wait_order_success_message(self):
-        message = WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(OrderPageLocators.ORDER_SUCCESS_MESSAGE))
+        message = self.wait_for_element_visible(OrderPageLocators.ORDER_SUCCESS_MESSAGE)
         return message.text
     
     def fill_first_page(self, first_name, last_name, address, metro_station, phone_number):

@@ -1,35 +1,53 @@
 from selenium import webdriver
+from pages.base_page import BasePage
+from locators.base_page_locators import BasePageLocators
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions 
 from locators.main_page_locators import MainPageLocators
+from data.urls import BASE_URL
 import allure
 
-class MainPage:
+class MainPage(BasePage):
     
-
-    def __init__(self, driver):
-        self.driver = driver
 
     @allure.step("Клик по верхней кнопке 'Заказать'")
     def click_upper_order_button(self):
-        self.driver.find_element(*MainPageLocators.UPPER_ORDER_BUTTON).click()
+        self.click_element(MainPageLocators.UPPER_ORDER_BUTTON)
 
     @allure.step("Клик по нижней кнопке 'Заказать'")
     def click_lower_order_button(self):
-        lower_order_button = self.driver.find_element(*MainPageLocators.LOWER_ORDER_BUTTON)
-        self.driver.execute_script("arguments[0].scrollIntoView();", lower_order_button)
-        self.driver.execute_script("arguments[0].click();", lower_order_button)
+        lower_order_button = self.find_element(MainPageLocators.LOWER_ORDER_BUTTON)
+        self.js_scroll_into_view(lower_order_button)
+        self.js_click(lower_order_button)
 
     @allure.step("Кликаем на вопрос FAQ с индексом {index}")
     def click_faq_question(self, index):
         question_locator = MainPageLocators.faq_question_locator(index)
-        question = WebDriverWait(self.driver, 20).until(expected_conditions.visibility_of_element_located(question_locator))
-        self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", question)
-        self.driver.execute_script("arguments[0].click();", question)
+        question = self.wait_for_element_visible(question_locator, timeout=20)
+        self.js_scroll_into_view(question)
+        self.js_click(question)
 
     @allure.step("Получаем текст ответа на вопрос FAQ с индексом {index}")
     def get_faq_answer_text(self, index):
         answer_locator = MainPageLocators.faq_answer_locator(index)
-        answer = WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(answer_locator))
+        answer = self.wait_for_element_visible(answer_locator, timeout=10)
         return answer.text
+    
+    @allure.step("Клик по логотипу Яндекса")
+    def click_yandex_logo(self):
+        self.click_element(BasePageLocators.YANDEX_LOGO)
+
+    @allure.step("Клик по логотипу Самоката")
+    def click_samokat_logo(self):
+        self.click_element(BasePageLocators.SAMOKAT_LOGO)
+
+    @allure.step("Ожидаем загрузки страницы Дзена")
+    def wait_dzen_loaded(self):
+        self.wait_for_url_contains("dzen.ru")
+
+    @allure.step("Ожидаем загрузки главной страницы")
+    def wait_main_page_loaded(self):
+        self.wait_for_url_to_be(BASE_URL)
+
+    
