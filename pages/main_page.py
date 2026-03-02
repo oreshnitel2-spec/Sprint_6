@@ -10,6 +10,8 @@ import allure
 
 class MainPage(BasePage):
     
+    def __init__(self, driver):
+        super().__init__(driver)
 
     @allure.step("Клик по верхней кнопке 'Заказать'")
     def click_upper_order_button(self):
@@ -49,5 +51,14 @@ class MainPage(BasePage):
     @allure.step("Ожидаем загрузки главной страницы")
     def wait_main_page_loaded(self):
         self.wait_for_url_to_be(BASE_URL)
+
+    @allure.step("Выбираем кнопку для оформления заказа - {button_type}")
+    def select_order_button(self, button_type):
+        if button_type == "upper":
+            self.click_upper_order_button()
+        elif button_type == "lower":
+            self.click_lower_order_button()
+        else:
+            raise ValueError(f"Неподдерживаемый тип кнопки: {button_type}")
 
     

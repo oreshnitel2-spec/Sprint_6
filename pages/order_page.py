@@ -10,7 +10,7 @@ from locators.base_page_locators import BasePageLocators
 class OrderPage(BasePage):
     
     def __init__(self, driver):
-        self.driver = driver
+        super().__init__(driver)
 
     @allure.step("Клик по кнопке 'Далее'")
     def click_next_button(self):
