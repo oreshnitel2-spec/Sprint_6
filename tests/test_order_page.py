@@ -8,18 +8,13 @@ import allure
 
 class TestOrderPage:
 
-    driver = None
-    
-    
-    @classmethod
-    def setup_class(cls):
-        with allure.step('Открываем браузер Firefox'):
-            cls.driver = webdriver.Firefox()
+  
 
     @allure.feature("Оформление заказа")
     @allure.story("Проверка успешного оформления заказа с различными данными") 
     @pytest.mark.parametrize("first_name, last_name, address, metro_station, phone_number, date, rental_period, color, order_button", DATA_FOR_ORDER)
-    def test_order_success(self, first_name, last_name, address, metro_station, phone_number, date, rental_period, color, order_button):
+    def test_order_success(self, driver_firefox, first_name, last_name, address, metro_station, phone_number, date, rental_period, color, order_button):
+        self.driver = driver_firefox
         self.driver.get(BASE_URL)
         main_page = MainPage(self.driver)
         main_page.select_order_button(order_button)
@@ -35,7 +30,3 @@ class TestOrderPage:
         assert "Заказ оформлен" in success_message, f"Ожидали сообщение 'Заказ оформлен', получили {success_message}"
         
           
-    @classmethod
-    def teardown_class(cls):
-        with allure.step("Закрываем браузер Firefox"):
-            cls.driver.quit()
