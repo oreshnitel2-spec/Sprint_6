@@ -11,7 +11,7 @@ class TestOrderPage:
   
 
     @allure.feature("Оформление заказа")
-    @allure.story("Проверка успешного оформления заказа с различными данными") 
+    @allure.title("Проверка успешного оформления заказа с различными данными") 
     @pytest.mark.parametrize("first_name, last_name, address, metro_station, phone_number, date, rental_period, color, order_button", DATA_FOR_ORDER)
     def test_order_success(self, driver_firefox, first_name, last_name, address, metro_station, phone_number, date, rental_period, color, order_button):
         self.driver = driver_firefox

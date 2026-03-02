@@ -12,7 +12,7 @@ class TestMainPage:
   
 
     @allure.feature("FAQ")
-    @allure.story("Проверка всех ответов")
+    @allure.title("Проверка всех ответов")
     @pytest.mark.parametrize("index, expected_answer", FAQ_ANSWERS)
     def test_faq_answer(self, driver_firefox, index, expected_answer):
         self.driver = driver_firefox
@@ -23,7 +23,7 @@ class TestMainPage:
         assert answer_text == expected_answer, f"Ожидаемый ответ: {expected_answer}, полученный ответ: {answer_text}"
 
     @allure.feature("Логотипы")
-    @allure.story("Проверка клика по Яндекс логотипу")
+    @allure.title("Проверка клика по Яндекс логотипу")
     def test_yandex_logo_click_success(self, driver_firefox):
         self.driver = driver_firefox
         self.driver.get(BASE_URL)
@@ -33,7 +33,8 @@ class TestMainPage:
         main_page.wait_dzen_loaded()
         assert "dzen.ru" in self.driver.current_url, f"Ожидали 'dzen.ru' в URL, получили {self.driver.current_url}"
 
-    @allure.story("Проверка клика по логотипу Самоката")
+    @allure.feature("Логотипы")
+    @allure.title("Проверка клика по логотипу Самоката")
     def test_samokat_logo_click_success(self, driver_firefox):
         self.driver = driver_firefox
         self.driver.get(BASE_URL)
@@ -44,7 +45,7 @@ class TestMainPage:
         assert self.driver.current_url == BASE_URL, f"Ожидали URL '{BASE_URL}', получили {self.driver.current_url}"
 
     @allure.feature("Заказ")
-    @allure.story("Проверка верхней кнопки 'Заказать'")
+    @allure.title("Проверка верхней кнопки 'Заказать'")
     def test_upper_order_button_click_success(self, driver_firefox):
         self.driver = driver_firefox
         self.driver.get(BASE_URL)
@@ -52,7 +53,8 @@ class TestMainPage:
         main_page.click_upper_order_button()
         assert "/order" in self.driver.current_url, f"Ожидали URL '{BASE_URL}order', получили {self.driver.current_url}"
 
-    @allure.story("Проверка нижней кнопки 'Заказать'")
+    @allure.feature("Заказ")
+    @allure.title("Проверка нижней кнопки 'Заказать'")
     def test_lower_order_button_click_success(self, driver_firefox):
         self.driver = driver_firefox
         self.driver.get(BASE_URL)
