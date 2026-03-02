@@ -11,6 +11,6 @@ class OrderPageLocators:
     RENTAL_PERIOD = (By.XPATH, "//div[contains(text(), 'Срок аренды')]/..")
     BLACK_COLOR_CHECKBOX = (By.ID, "black")
     GREY_COLOR_CHECKBOX = (By.ID, "grey")
-    ORDER_BUTTON = (By.XPATH, "(//button[text()='Заказать'])[2]")
+    ORDER_BUTTON = (By.XPATH, "//div[contains(@class,'Order_Buttons')]//button[text()='Заказать']")
     YES_BUTTON = (By.XPATH, "//button[text()='Да']")
     ORDER_SUCCESS_MESSAGE = (By.XPATH, "//div[contains(text(), 'Заказ оформлен')]")
