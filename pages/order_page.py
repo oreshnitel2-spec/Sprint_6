@@ -52,13 +52,7 @@ class OrderPage(BasePage):
     def select_rental_period(self, period):
         self.click_element(OrderPageLocators.RENTAL_PERIOD)
         period_option = (By.XPATH, f"//div[text()='{period}']")
-        try:
-            self.click_when_clickable(period_option)
-        except Exception as e:
-            # при ошибке соберём все доступные опции, чтобы было понятнее, что пошло не так
-            options = self.driver.find_elements(By.XPATH, "//div[contains(@class,'Dropdown-option')]")
-            texts = [o.text for o in options]
-            raise AssertionError(f"Не удалось выбрать срок аренды '{period}'. Доступные варианты: {texts}") from e
+        self.click_when_clickable(period_option)
 
     @allure.step("Выбираем цвет самоката: {color}")
     def select_color(self, color):

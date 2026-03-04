@@ -31,7 +31,7 @@ class TestMainPage:
         main_page.click_yandex_logo()
         main_page.switch_to_new_window()
         main_page.wait_dzen_loaded()
-        assert "dzen.ru" in self.driver.current_url, f"Ожидали 'dzen.ru' в URL, получили {self.driver.current_url}"
+        assert "dzen.ru" in main_page.get_url(), f"Ожидали 'dzen.ru' в URL, получили {main_page.get_url()}"
 
     @allure.feature("Логотипы")
     @allure.title("Проверка клика по логотипу Самоката")
@@ -42,7 +42,7 @@ class TestMainPage:
         main_page.click_lower_order_button()
         main_page.click_samokat_logo()
         main_page.wait_main_page_loaded()
-        assert self.driver.current_url == BASE_URL, f"Ожидали URL '{BASE_URL}', получили {self.driver.current_url}"
+        assert main_page.get_url() == BASE_URL, f"Ожидали URL '{BASE_URL}', получили {main_page.get_url()}"
 
     @allure.feature("Заказ")
     @allure.title("Проверка верхней кнопки 'Заказать'")
@@ -51,7 +51,7 @@ class TestMainPage:
         self.driver.get(BASE_URL)
         main_page = MainPage(self.driver)
         main_page.click_upper_order_button()
-        assert "/order" in self.driver.current_url, f"Ожидали URL '{BASE_URL}order', получили {self.driver.current_url}"
+        assert "/order" in main_page.get_url(), f"Ожидали URL '{BASE_URL}order', получили {main_page.get_url()}"
 
     @allure.feature("Заказ")
     @allure.title("Проверка нижней кнопки 'Заказать'")
@@ -60,6 +60,6 @@ class TestMainPage:
         self.driver.get(BASE_URL)
         main_page = MainPage(self.driver)
         main_page.click_lower_order_button()
-        assert "/order" in self.driver.current_url, f"Ожидали URL '{BASE_URL}order', получили {self.driver.current_url}"
+        assert "/order" in main_page.get_url(), f"Ожидали URL '{BASE_URL}order', получили {main_page.get_url()}"
 
     
